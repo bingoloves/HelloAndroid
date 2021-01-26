@@ -1,0 +1,56 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'maven'
+uploadArchives{
+    repositories.mavenDeployer{
+        //本地仓库路径
+        repository(url: uri('../repo'))
+        // 唯一标识
+        pom.groupId = "cn.cqs"
+        // 项目名称
+        pom.artifactId = "common"
+        // 版本号
+        pom.version = "1.0.0"
+    }
+}
+/**
+ * 组件的中间层，项目中的组件都必须依赖的公共模块
+ */
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    def deps = rootProject.ext.dependencies
+    implementation deps.appcompat
+    //工具类组件
+    api 'cn.cqs:base:1.0.0'
+    api deps.gson
+    api deps.immersionbar
+    //glide
+    api deps.glide
+    annotationProcessor deps.glideCompiler
+    //ARouter路由
+    api deps.arouterApi
+    annotationProcessor deps.arouterCompiler
+    //ButterKnife
+    api deps.butterknife
+    annotationProcessor deps.butterknifeCompiler
+}
