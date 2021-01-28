@@ -1,2 +1,31 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.cqs.common" />
+    package="cn.cqs.common">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application android:networkSecurityConfig="@xml/network_security_config">
+        <meta-data
+            android:name="design_width_in_dp"
+            android:value="360"/>
+        <meta-data
+            android:name="design_height_in_dp"
+            android:value="640"/>
+        <activity
+            android:name=".crash.DefaultErrorActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:process=":error_activity" />
+        <provider
+            android:name=".crash.CaocInitProvider"
+            android:authorities="${applicationId}.crashinitprovider"
+            android:exported="false"
+            android:initOrder="101" />
+        <provider
+            android:name=".logcat.LogcatFileProvider"
+            android:authorities="${applicationId}.logcat_provider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/logcat_paths" />
+        </provider>
+        <activity android:name=".logcat.LogcatDetailActivity"/>
+    </application>
+</manifest>

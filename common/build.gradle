@@ -41,8 +41,11 @@ dependencies {
     def deps = rootProject.ext.dependencies
     implementation deps.appcompat
     //工具类组件
-    api 'cn.cqs:base:1.0.0'
+    api deps.base
     api deps.gson
+    api deps.design
+    api deps.autosize
+    api deps.permissionx
     api deps.immersionbar
     //glide
     api deps.glide
@@ -53,4 +56,7 @@ dependencies {
     //ButterKnife
     api deps.butterknife
     annotationProcessor deps.butterknifeCompiler
+    //Module生命周期感知
+    api deps.applifecycle
+    annotationProcessor deps.applifecycleCompiler
 }

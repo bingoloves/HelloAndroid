@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
-
+//apply plugin: 'BuildAdaptionPlugin'
+//使用插件applifecycle
+apply plugin: 'com.hm.plugin.lifecycle'
+//Sophix热修复
+apply plugin: 'com.aliyun.ams.emas-services'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
@@ -14,12 +18,54 @@ android {
                 arguments = [AROUTER_MODULE_NAME: project.getName()]
             }
         }
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            //热修复支持五种
+            abiFilters 'arm64-v8a', 'armeabi', 'armeabi-v7a', 'x86', 'x86_64'
+        }
+    }
+    signingConfigs {
+        release {
+            keyAlias 'android'
+            keyPassword '123456'
+            storeFile file('../keystore.jks')
+            storePassword '123456'
+        }
     }
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    //当前打包是否为了是补丁
+    def isPatch = false
+    applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                Calendar calendar = Calendar.getInstance(Locale.CHINA)
+                def buildDate = String.format(Locale.CHINA, "%04d%02d%02d", calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH))
+                def versionName = defaultConfig.versionName
+                def versionCode = defaultConfig.versionCode
+                //android studio3.0之前的写法
+                //output->output.outputFile=new File(output.outputFile.parent,output.outputFile.name.replace(".apk","-"+defaultConfig.versionName+".apk"))
+                //android studio3.0的写法
+                //项目名-版本名-版本号-release/debug.apk
+                if (variant.buildType.name == 'release') {
+                    if (isPatch){
+                        outputFileName = "${project.archivesBaseName}-v${versionName}-${versionCode}-${buildDate}-release.apk"
+                    } else {
+                        outputFileName = "${project.archivesBaseName}-v${versionName}-${versionCode}-${buildDate}-release-patch.apk"
+                    }
+                } else {
+                    outputFileName = "${project.archivesBaseName}-v${versionName}-${versionCode}-${buildDate}-debug.apk"
+                }
+            }
     }
 }
 
@@ -30,9 +76,35 @@ dependencies {
     implementation deps.design
     implementation deps.glide
     implementation deps.constraint
-    implementation 'cn.cqs:common:1.0.0'
+    implementation project(':common')
+//    implementation deps.common
     annotationProcessor deps.glideCompiler
     annotationProcessor deps.arouterCompiler
     annotationProcessor deps.butterknifeCompiler
-
+    annotationProcessor deps.applifecycleCompiler
+    //阿里云 热修复
+    implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.17'
 }
+/**EasySmallWidth屏幕适配*/
+/*adaptionAppExtension{
+    defaultDesignWidth = 360f
+    enableAdapter = true
+//    needToAdaptedWidth.add(400)
+//    needToAdaptedWidth.add(411)
+//    needToAdaptedWidth.add(441)
+//    needToAdaptedWidth.add(441)
+//    res路径，默认不用配置
+//    resPath = "${File.separator}src${File.separator}main${File.separator}res${File.separator}"
+
+    //针对单独模块创建独自的配置
+    //def ex = createBuildAdaptionPluginExtension(project,adaptionAppExtension,"testAutoBuildDimen")
+    //对模块testAutoBuildDimen sw400与默认值的转换关系为 实际值*1.0
+    //ex.conversionMap.put(400,1.0f)
+    //对模块testAutoBuildDimen sw400与默认值的转换关系为 实际值*2.0
+    //ex.conversionMap.put(411,2.0f)
+    //对模块testAutoBuildDimen sw400与默认值的转换关系为 实际值*3.0
+    //ex.conversionMap.put(441,3.0f)
+    //def aeasy = createBuildAdaptionPluginExtension(project,adaptionAppExtension,"aeasybuild")
+    //aeasy  模块的默认宽度是375dp
+    //aeasy.defaultDesignWidth = 375f
+}*/
