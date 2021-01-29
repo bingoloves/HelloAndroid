@@ -108,8 +108,16 @@ public class LogcatAdapter extends BaseAdapter implements Filterable {
                             mTagFilter = (String) constraint;
                         }
                         for (LogItem item : mData) {
-                            if (!item.isFiltered(mLevelFilter) && item.tag.equals(mTagFilter)) {
-                                filtered.add(item);
+                            if (mLevelFilter != null && mTagFilter != null){
+                                if (!item.isFiltered(mLevelFilter) && item.tag.equals(mTagFilter)) {
+                                    filtered.add(item);
+                                }
+                            } else {
+                                if (mTagFilter == null){
+                                    if (!item.isFiltered(mLevelFilter)) {
+                                        filtered.add(item);
+                                    }
+                                }
                             }
                         }
                     } else {
