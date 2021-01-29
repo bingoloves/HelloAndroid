@@ -74,9 +74,14 @@ dependencies {
     implementation deps.glide
     implementation deps.constraint
     implementation project(':common')
-    implementation project(':crash')
-    implementation project(':logcat')
-    implementation project(':workflow')
+//    implementation project(':crash')
+//    implementation project(':logcat')
+//    implementation project(':workflow')
+    implementation 'com.github.bingoloves:crash:1.0.2'
+    implementation 'com.github.bingoloves:logcat:1.0.0'
+    implementation 'com.github.bingoloves:workflow:1.0.0'
+    implementation 'com.github.bingoloves:adapter:1.0.0'
+
 //    implementation deps.common
     annotationProcessor deps.glideCompiler
     annotationProcessor deps.arouterCompiler

@@ -22,7 +22,7 @@ ext {
      * 依赖
      */
     dependencies = [
-            //私有库
+            //本地私有库
             base                     :"cn.cqs:base:1.0.0",                                          //基础工具库
             common                   :"cn.cqs:common:1.0.0",                                        //公共组件库
             adapter                  :"cn.cqs:adapter:1.0.0",                                       //适配器库

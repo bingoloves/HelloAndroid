@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+//远程jitpack配置
+apply plugin: 'com.github.dcendents.android-maven'
+group = 'com.github.bingoloves'
 apply plugin: 'maven'
 //自定义layout库，可满足大部分需求
 uploadArchives{
@@ -13,11 +16,29 @@ uploadArchives{
         pom.version = "1.0.0"
     }
 }
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        //发布私有在线库
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
+    }
+}
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion 28
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion 14
+        targetSdkVersion 28
     }
 
     buildTypes {
@@ -26,11 +47,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 }
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    def deps = rootProject.ext.dependencies
-    implementation deps.appcompat
+    implementation 'com.android.support:appcompat-v7:28.0.0'
 }
