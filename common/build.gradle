@@ -41,7 +41,10 @@ dependencies {
     def deps = rootProject.ext.dependencies
     implementation deps.appcompat
     //工具类组件
-    api deps.base
+    //api deps.base
+    //api deps.xlayout
+    api project(':base')
+    api project(':xlayout')
     api deps.gson
     api deps.design
     api deps.autosize
@@ -57,6 +60,6 @@ dependencies {
     api deps.butterknife
     annotationProcessor deps.butterknifeCompiler
     //Module生命周期感知
-    api deps.applifecycle
-    annotationProcessor deps.applifecycleCompiler
+//    api deps.applifecycle
+//    annotationProcessor deps.applifecycleCompiler
 }

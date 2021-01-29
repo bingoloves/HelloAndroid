@@ -15,8 +15,6 @@ buildscript {
         //classpath 'com.txl.EasySmallWidth:easySmallWidth:1.0.0'
         //第二步:引入butterknife依赖插件,为了module级别使用
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
-        //加载插件applifecycle
-        classpath 'com.github.hufeiyang.Android-AppLifecycleMgr:applifecycle-plugin:1.0.3'
         // 添加emas-services插件
         classpath 'com.aliyun.ams:emas-services:1.0.1'
     }

@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cn.cqs.crash">
+    <application>
+        <activity
+            android:name=".DefaultErrorActivity"
+            android:label="崩溃详情"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:process=":error_activity" />
+        <provider
+            android:name=".CrashProvider"
+            android:authorities="${applicationId}.crashprovider"
+            android:exported="false"
+            android:initOrder="101" />
+    </application>
+</manifest>

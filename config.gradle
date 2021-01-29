@@ -25,6 +25,10 @@ ext {
             //私有库
             base                     :"cn.cqs:base:1.0.0",                                          //基础工具库
             common                   :"cn.cqs:common:1.0.0",                                        //公共组件库
+            adapter                  :"cn.cqs:adapter:1.0.0",                                       //适配器库
+            crash                    :"cn.cqs:crash:1.0.0",                                         //崩溃异常捕捉库
+            logcat                   :"cn.cqs:logcat:1.0.0",                                        //同屏日志库
+            xlayout                  :"cn.cqs:xlayout:1.0.0",                                       //自定义常用原生组件库
             //路由框架
             arouterApi               : "com.alibaba:arouter-api:${version.arouterApi}",
             arouterCompiler          : "com.alibaba:arouter-compiler:${version.arouterCompiler}",
