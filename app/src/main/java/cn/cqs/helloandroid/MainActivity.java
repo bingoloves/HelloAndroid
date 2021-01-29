@@ -3,6 +3,7 @@ package cn.cqs.helloandroid;
 import android.Manifest;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.permissionx.guolindev.callback.RequestCallback;
@@ -28,20 +29,31 @@ public class MainActivity extends AppCompatActivity implements FloatView.OnFloat
         FloatViewController.getInstance().initFloatLayout(this,R.mipmap.ic_launcher,this);
         FloatViewController.getInstance().show();
         initPermissionX();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (true){
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    i++;
-//                    Log.e("TAG","i = "+i);
-//                }
-//            }
-//        }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    i++;
+                    int level = i % 5;
+                    if (level == 0){
+                        Log.v("TAG1","i = "+ MainActivity.this.i);
+                    } else if (level == 1){
+                        Log.d("TAG2","i = "+ MainActivity.this.i);
+                    }else if (level == 2){
+                        Log.i("TAG3","i = "+ MainActivity.this.i);
+                    } else if (level == 3){
+                        Log.w("TAG4","i = "+ MainActivity.this.i);
+                    }else {
+                        Log.e("TAG5","i = "+ MainActivity.this.i);
+                    }
+                }
+            }
+        }).start();
         //CrashHelper.init(true,0,null);
     }
 

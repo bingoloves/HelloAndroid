@@ -1,6 +1,9 @@
 package cn.cqs.logcat;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,24 +13,35 @@ import android.widget.Filterable;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class LogcatAdapter extends BaseAdapter implements Filterable {
 
     private ArrayList<LogItem> mData;
     @Nullable private ArrayList<LogItem> mFilteredData = null;
-    @Nullable private String mFilter = null;
-
-    public LogcatAdapter() {
+    //日志级别类型过滤器
+    @Nullable private String mLevelFilter = null;
+    //日志TAG过滤器
+    @Nullable private String mTagFilter = null;
+    private String[] spinnerArray = null;
+    public LogcatAdapter(Context context) {
         mData = new ArrayList<>();
+        spinnerArray = context.getResources().getStringArray(R.array.logcat_spinner);
     }
 
     public void append(LogItem item) {
         synchronized (LogcatAdapter.class) {
             mData.add(item);
-            if (mFilter != null && mFilteredData != null) {
-                if (!item.isFiltered(mFilter)) {
-                    mFilteredData.add(item);
+            if (mLevelFilter != null && mFilteredData != null) {
+                if (mTagFilter != null){
+                    if (!item.isFiltered(mLevelFilter) && item.tag.equals(mTagFilter)) {
+                        mFilteredData.add(item);
+                    }
+                } else {
+                    if (!item.isFiltered(mLevelFilter)) {
+                        mFilteredData.add(item);
+                    }
                 }
             }
             notifyDataSetChanged();
@@ -37,6 +51,8 @@ public class LogcatAdapter extends BaseAdapter implements Filterable {
     public void clear() {
         synchronized (LogcatAdapter.class) {
             mData.clear();
+            mTagFilter = null;
+            mLevelFilter = null;
             mFilteredData = null;
             notifyDataSetChanged();
         }
@@ -84,23 +100,26 @@ public class LogcatAdapter extends BaseAdapter implements Filterable {
             protected FilterResults performFiltering(CharSequence constraint) {
                 synchronized (LogcatAdapter.class) {
                     FilterResults results = new FilterResults();
-
-                    if (constraint == null) {
-                        mFilter = null;
-                        results.count = mData.size();
-                        results.values = null;
-                        return results;
-                    } else {
-                        mFilter = String.valueOf(constraint.charAt(0));
-                    }
-
                     ArrayList<LogItem> filtered = new ArrayList<>();
-                    for (LogItem item : mData) {
-                        if (!item.isFiltered(mFilter)) {
-                            filtered.add(item);
+                    if (!TextUtils.isEmpty(constraint)){
+                        if (contain(spinnerArray, (String) constraint)){
+                            mLevelFilter = String.valueOf(constraint.charAt(0));
+                        } else {
+                            mTagFilter = (String) constraint;
+                        }
+                        for (LogItem item : mData) {
+                            if (!item.isFiltered(mLevelFilter) && item.tag.equals(mTagFilter)) {
+                                filtered.add(item);
+                            }
+                        }
+                    } else {
+                        mTagFilter = null;
+                        for (LogItem item : mData) {
+                            if (!item.isFiltered(mLevelFilter)) {
+                                filtered.add(item);
+                            }
                         }
                     }
-
                     results.values = filtered;
                     results.count = filtered.size();
                     return results;
@@ -120,6 +139,25 @@ public class LogcatAdapter extends BaseAdapter implements Filterable {
         };
     }
 
+
+//    public static boolean contain(String[] arr, String targetValue) {
+//        Log.e("TAG","spinnerArray：" + TextUtils.join("|",arr));
+//        int a = Arrays.binarySearch(arr, targetValue);
+//        return a > 0;
+//    }
+    /**
+     * 判断数组是否包含目标值
+     * @param arr
+     * @param targetValue
+     * @return
+     */
+    public boolean contain(String[] arr, String targetValue) {
+        for (String s : arr) {
+            if (s.equals(targetValue))
+                return true;
+        }
+        return false;
+    }
     public static class Holder {
         private static final SimpleDateFormat sDateFormat = new SimpleDateFormat(
                 "MM-dd hh:mm:ss.SSS", Locale.getDefault());

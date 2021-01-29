@@ -33,5 +33,6 @@ dependencies {
     def deps = rootProject.ext.dependencies
     implementation deps.appcompat
     implementation deps.design
+//    implementation deps.xlayout
     implementation project(':xlayout')
 }

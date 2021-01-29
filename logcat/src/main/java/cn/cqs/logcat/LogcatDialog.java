@@ -2,12 +2,14 @@ package cn.cqs.logcat;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
@@ -54,39 +56,26 @@ public class LogcatDialog extends BottomSheetDialogFragment implements View.OnCl
     }
     private EditText searchEt;
     private Spinner spinner;
-    private ImageView clearImageView,shareImageView;
+    private ImageView clearImageView,shareImageView,searchImageView;
     /*当前状态*/
     private TextView playStateTv;
     private ListView listView;
-    private LogcatAdapter logcatAdapter = new LogcatAdapter();
+    private LogcatAdapter logcatAdapter;
     @SuppressLint("ClickableViewAccessibility")
     private void initView(View view) {
-        searchEt = view.findViewById(R.id.search);
+        searchEt = view.findViewById(R.id.search_input);
+        searchImageView = view.findViewById(R.id.logcat_search);
         spinner = view.findViewById(R.id.spinner);
         clearImageView = view.findViewById(R.id.iv_clean);
         shareImageView = view.findViewById(R.id.iv_share);
         playStateTv = view.findViewById(R.id.tv_pause);
         listView = view.findViewById(R.id.listView);
-
+        logcatAdapter = new LogcatAdapter(getContext());
+        searchImageView.setOnClickListener(this);
         clearImageView.setOnClickListener(this);
         shareImageView.setOnClickListener(this);
         playStateTv.setOnClickListener(this);
-        //数据适配
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.logcat_spinner, R.layout.logcat_dropdown_item);
-        spinnerAdapter.setDropDownViewResource(R.layout.logcat_dropdown_item);
-        spinner.setAdapter(spinnerAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String filter = getResources().getStringArray(R.array.logcat_spinner)[position];
-                logcatAdapter.getFilter().filter(filter);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        initSpinnerStyle(spinner,getResources().getStringArray(R.array.logcat_spinner));
         //搜索监听
         searchEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
@@ -143,7 +132,52 @@ public class LogcatDialog extends BottomSheetDialogFragment implements View.OnCl
         //点击任意布局关闭
         mBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
+    /**
+     * Spinner统一风格
+     *
+     * @param items
+     * @param spinner
+     */
+    public void initSpinnerStyle(Spinner spinner, String[] items) {
+        setSpinnerDropDownVerticalOffset(spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(spinner.getContext(), R.layout.logcat_dropdown_item, R.id.spinner_item, items);
+        adapter.setDropDownViewResource(R.layout.logcat_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String filter = getResources().getStringArray(R.array.logcat_spinner)[position];
+                logcatAdapter.getFilter().filter(filter);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    /**
+     * 设置系统Spinner的下拉偏移
+     *
+     * @param spinner
+     */
+    public void setSpinnerDropDownVerticalOffset(Spinner spinner) {
+        int itemHeight = dip2px(getContext(),30f);
+        int dropdownOffset = dip2px(getContext(),1f);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            spinner.setDropDownVerticalOffset(0);
+        } else {
+            spinner.setDropDownVerticalOffset(itemHeight + dropdownOffset);
+        }
+    }
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     */
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
     /**
      * 日志状态控制
      */
@@ -194,10 +228,12 @@ public class LogcatDialog extends BottomSheetDialogFragment implements View.OnCl
 
     @Override
     public void onClick(final View v) {
-        int i = v.getId();
-        if (i == R.id.iv_clean) {
+        int id = v.getId();
+        if (id == R.id.iv_clean) {
             logcatAdapter.clear();
-        } else if (i == R.id.iv_share) {
+            spinner.setSelection(0);
+            searchEt.setText(null);
+        } else if (id == R.id.iv_share) {
             @SuppressLint("StaticFieldLeak")
             ExportLogFileTask task = new ExportLogFileTask(getContext().getExternalCacheDir()) {
                 @Override
@@ -220,14 +256,15 @@ public class LogcatDialog extends BottomSheetDialogFragment implements View.OnCl
                 }
             };
             task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, logcatAdapter.getData());
-        } else if (i == R.id.tv_pause) {
+        } else if (id == R.id.tv_pause) {
             if (isStop){
                 startLogcat();
             } else {
                 stopLogcat();
             }
-        } else {
-
+        } else if (id == R.id.logcat_search){
+            String searchValue = searchEt.getText().toString().trim();
+            logcatAdapter.getFilter().filter(searchValue);
         }
     }
 
