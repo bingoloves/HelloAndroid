@@ -9,11 +9,16 @@ import android.widget.TextView;
 import com.permissionx.guolindev.callback.RequestCallback;
 import java.util.List;
 import cn.cqs.base.DensityUtils;
+import cn.cqs.common.log.LogUtils;
 import cn.cqs.common.utils.PermissionUtils;
 import cn.cqs.common.utils.ToastUtils;
 import cn.cqs.common.view.floatview.FloatView;
 import cn.cqs.common.view.floatview.FloatViewController;
 import cn.cqs.logcat.LogcatDialog;
+import cn.cqs.workflow.Node;
+import cn.cqs.workflow.WorkFlow;
+import cn.cqs.workflow.WorkNode;
+import cn.cqs.workflow.Worker;
 
 public class MainActivity extends AppCompatActivity implements FloatView.OnFloatViewIconClickListener {
 
@@ -25,36 +30,36 @@ public class MainActivity extends AppCompatActivity implements FloatView.OnFloat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         infoTv = findViewById(R.id.tv_info);
-        infoTv.setText("当前设备分辨率:"+ DensityUtils.getScreenW(this)+":"+DensityUtils.getScreenH(this));
+        infoTv.setText("当前设备分辨率:"+ DensityUtils.getScreenWidth(this)+":"+DensityUtils.getScreenHeight(this));
         FloatViewController.getInstance().initFloatLayout(this,R.mipmap.ic_launcher,this);
         FloatViewController.getInstance().show();
         initPermissionX();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    i++;
-                    int level = i % 5;
-                    if (level == 0){
-                        Log.v("TAG1","i = "+ MainActivity.this.i);
-                    } else if (level == 1){
-                        Log.d("TAG2","i = "+ MainActivity.this.i);
-                    }else if (level == 2){
-                        Log.i("TAG3","i = "+ MainActivity.this.i);
-                    } else if (level == 3){
-                        Log.w("TAG4","i = "+ MainActivity.this.i);
-                    }else {
-                        Log.e("TAG5","i = "+ MainActivity.this.i);
-                    }
-                }
-            }
-        }).start();
-        //CrashHelper.init(true,0,null);
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true){
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    i++;
+//                    int level = i % 5;
+//                    if (level == 0){
+//                        Log.v("TAG1","i = "+ MainActivity.this.i);
+//                    } else if (level == 1){
+//                        Log.d("TAG2","i = "+ MainActivity.this.i);
+//                    }else if (level == 2){
+//                        Log.i("TAG3","i = "+ MainActivity.this.i);
+//                    } else if (level == 3){
+//                        Log.w("TAG4","i = "+ MainActivity.this.i);
+//                    }else {
+//                        Log.e("TAG5","i = "+ MainActivity.this.i);
+//                    }
+//                }
+//            }
+//        }).start();
+//CrashHelper.init(true,0,null);
     }
 
     private void initPermissionX() {
@@ -80,6 +85,53 @@ public class MainActivity extends AppCompatActivity implements FloatView.OnFloat
     }
     public void hideFloat(View view){
         FloatViewController.getInstance().dismiss();
+    }
+    public void showWorkflow(final View view){
+        WorkFlow workFlow = new WorkFlow.Builder()
+                .withNode(WorkNode.build(1, new Worker() {
+                    @Override
+                    public void doWork(final Node node) {
+                        ToastUtils.show("我是工作流1,两秒后执行下一工作流");
+                        view.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                node.onCompleted();
+                            }
+                        },5000);
+                    }
+                }))
+                .withNode(WorkNode.build(2, new Worker() {
+                    @Override
+                    public void doWork(final Node node) {
+                        ToastUtils.show("我是工作流2,两秒后执行下一工作流");
+                        view.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                node.onCompleted();
+                            }
+                        },2000);
+                    }
+                }))
+                .withNode(WorkNode.build(3, new Worker() {
+                    @Override
+                    public void doWork(Node node) {
+                        ToastUtils.show("我是工作流3");
+                        node.onCompleted();
+                    }
+                }))
+                .create();
+        workFlow.start();
+        workFlow.setCallBack(new WorkFlow.FlowCallBack() {
+            @Override
+            public void onNodeChanged(int nodeId) {
+                LogUtils.e("nodeId : "+nodeId);
+            }
+
+            @Override
+            public void onFlowFinish() {
+                LogUtils.e("onFlowFinish");
+            }
+        });
     }
 
     @Override

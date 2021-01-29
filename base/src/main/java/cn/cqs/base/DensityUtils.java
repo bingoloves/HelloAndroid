@@ -82,11 +82,11 @@ public final class DensityUtils {
     public static int getScreenDpi(Context context) {
         return getDisplayMetrics(context).densityDpi;
     }
-    public static int getScreenW(Context context){
+    public static int getScreenWidth(Context context){
         return getDisplayMetrics(context).widthPixels;
     }
 
-    public static int getScreenH(Context context){
+    public static int getScreenHeight(Context context){
         return getDisplayMetrics(context).heightPixels;
     }
     /**

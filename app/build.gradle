@@ -76,6 +76,7 @@ dependencies {
     implementation project(':common')
     implementation project(':crash')
     implementation project(':logcat')
+    implementation project(':workflow')
 //    implementation deps.common
     annotationProcessor deps.glideCompiler
     annotationProcessor deps.arouterCompiler

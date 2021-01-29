@@ -26,4 +26,10 @@
         android:text="hideFloat"
         android:textAllCaps="false"
         android:onClick="hideFloat" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="workflow"
+        android:textAllCaps="false"
+        android:onClick="showWorkflow" />
 </LinearLayout>
