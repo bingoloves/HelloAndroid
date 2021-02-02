@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'BuildAdaptionPlugin'
+apply plugin: 'android-aspectjx'
+//aspectjx {//另外如果使用淘宝等其他的 sdk ,需要进行排除
+//    exclude 'androidx','com.google','com.squareup','com.alipay','org.apache','com.taobao'
+//    enabled true
+//}
 //Sophix热修复
 apply plugin: 'com.aliyun.ams.emas-services'
 android {
@@ -73,6 +78,7 @@ dependencies {
     implementation deps.design
     implementation deps.glide
     implementation deps.constraint
+    implementation project(':aop')
     implementation project(':common')
 //    implementation project(':crash')
 //    implementation project(':logcat')

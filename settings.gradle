@@ -1,1 +1,1 @@
-include ':app', ':common', ':base', ':logcat', ':xlayout', ':crash', ':adapter', ':workflow'
+include ':app', ':common', ':base', ':logcat', ':xlayout', ':crash', ':adapter', ':workflow', ':aop'

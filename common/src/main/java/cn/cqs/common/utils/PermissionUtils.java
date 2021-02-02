@@ -1,9 +1,6 @@
 package cn.cqs.common.utils;
 
-import android.Manifest;
-import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
-import android.widget.Toast;
 
 import com.permissionx.guolindev.PermissionX;
 import com.permissionx.guolindev.callback.ExplainReasonCallbackWithBeforeParam;
@@ -11,7 +8,6 @@ import com.permissionx.guolindev.callback.ForwardToSettingsCallback;
 import com.permissionx.guolindev.callback.RequestCallback;
 import com.permissionx.guolindev.request.ExplainScope;
 import com.permissionx.guolindev.request.ForwardScope;
-
 import java.util.List;
 
 /**

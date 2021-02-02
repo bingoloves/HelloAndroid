@@ -1,38 +1,38 @@
 package cn.cqs.helloandroid;
 
 import android.Manifest;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.permissionx.guolindev.callback.RequestCallback;
 import java.util.List;
+import cn.cqs.aop.annotation.AspectAnalyze;
+import cn.cqs.aop.annotation.SingleClick;
+import cn.cqs.aop.aspect.ActivityAspect;
+import cn.cqs.aop.navigation.Navigator;
 import cn.cqs.base.DensityUtils;
 import cn.cqs.common.log.LogUtils;
 import cn.cqs.common.utils.PermissionUtils;
 import cn.cqs.common.utils.ToastUtils;
-import cn.cqs.common.view.floatview.FloatView;
 import cn.cqs.common.view.floatview.FloatViewController;
-import cn.cqs.logcat.LogcatDialog;
 import cn.cqs.workflow.Node;
 import cn.cqs.workflow.WorkFlow;
 import cn.cqs.workflow.WorkNode;
 import cn.cqs.workflow.Worker;
 
-public class MainActivity extends AppCompatActivity implements FloatView.OnFloatViewIconClickListener {
+public class MainActivity extends AppCompatActivity{
 
     private int i = 0;
     private TextView infoTv;
-
+    @AspectAnalyze(name = "MainActivity.onCreate")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         infoTv = findViewById(R.id.tv_info);
         infoTv.setText("当前设备分辨率:"+ DensityUtils.getScreenWidth(this)+":"+DensityUtils.getScreenHeight(this));
-        FloatViewController.getInstance().initFloatLayout(this,R.mipmap.ic_launcher,this);
-        FloatViewController.getInstance().show();
         initPermissionX();
 //        new Thread(new Runnable() {
 //            @Override
@@ -62,6 +62,17 @@ public class MainActivity extends AppCompatActivity implements FloatView.OnFloat
 //CrashHelper.init(true,0,null);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int activityStackSize = ActivityAspect.getActivityStackSize();
+        Activity currentActivity = ActivityAspect.getCurrentActivity();
+        LogUtils.e("activityStackSize = "+activityStackSize);
+        if (currentActivity != null){
+            LogUtils.e("currentActivity = "+currentActivity.getClass().getName());
+        }
+    }
+
     private void initPermissionX() {
         PermissionUtils.request(this,new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE}, new RequestCallback() {
             @Override
@@ -71,20 +82,19 @@ public class MainActivity extends AppCompatActivity implements FloatView.OnFloat
             }
         });
     }
-
-
+    @SingleClick(value = 1000)
     public void toastTest(View view){
-//        LogUtils.e("测试bug"+1/0);
-//          ToastUtils.show("哈哈哈修复了bug");
-          ToastUtils.show(R.drawable.ic_check_24dp,"哈哈哈");
+        LogUtils.e("测试bug"+1/0);
+            i++;
+//          ToastUtils.show("哈哈哈 i = " + i);
+//          ToastUtils.show(R.drawable.ic_check_24dp,"哈哈哈");
 //        ToastUtils.show(R.drawable.ic_check_24dp,"哈哈哈,恭喜啦 你中奖啦,快来领奖啊按时不领作废处理,你一定要早点来兑换啊，不然就没机会了");
     }
     public void showFloat(View view){
-        //FloatViewController.getInstance().show();
-        ToastUtils.show("哈哈哈");
+        FloatViewController.getInstance().show(this);
     }
     public void hideFloat(View view){
-        FloatViewController.getInstance().dismiss();
+        FloatViewController.getInstance().dismiss(this);
     }
     public void showWorkflow(final View view){
         WorkFlow workFlow = new WorkFlow.Builder()
@@ -133,15 +143,11 @@ public class MainActivity extends AppCompatActivity implements FloatView.OnFloat
             }
         });
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        FloatViewController.getInstance().destroy();
-    }
-
-    @Override
-    public void onFloatViewClick() {
-        new LogcatDialog().show(getSupportFragmentManager(),"logcat");
+    public void navigateTwo(View view){
+//        Intent intent = new Intent(this, TwoActivity.class);
+//        intent.putExtra("name","xuebing");
+//        startActivity(intent);
+        Navigator.create(NavigationServer.class).moveTwo(this, "xuebing");
+        finish();
     }
 }

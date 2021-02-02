@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+group = 'com.github.bingoloves'
 apply plugin: 'maven'
 uploadArchives{
     repositories.mavenDeployer{
@@ -12,15 +14,34 @@ uploadArchives{
         pom.version = "1.0.0"
     }
 }
-
+/**单独配置外层配置，用于发布jitpack*/
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        //发布私有在线库
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
+    }
+}
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
+/**单独配置外层配置，用于发布jitpack*/
 /**
  * Base组件主要是一些常用的固定的工具类，一般确认后很少改变
  */
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion 28
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion 14
+        targetSdkVersion 28
     }
 
     buildTypes {
@@ -33,6 +54,5 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    def deps = rootProject.ext.dependencies
-    implementation deps.appcompat
+    implementation 'com.android.support:appcompat-v7:28.0.0'
 }

@@ -11,13 +11,15 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
-        //发布私有在线库
+        //发布私有在线库(jitpack)
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
         //classpath 'com.txl.EasySmallWidth:easySmallWidth:1.0.0'
-        //第二步:引入butterknife依赖插件,为了module级别使用
+        //添加butterknife依赖插件,为了module级别使用
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
-        // 添加emas-services插件
+        //添加emas-services插件(阿里热更新)
         classpath 'com.aliyun.ams:emas-services:1.0.1'
+        //添加 aspectj(Aop)
+        classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.4'
     }
 }
 

@@ -137,6 +137,12 @@ public class DragViewLayout extends RelativeLayout {
         if(isUp) {
             x = isRightFloat() ? mScreenWidth : 0;
         }
+        if (x < 0){
+            x = 0;
+        }
+        if (x > mScreenWidth - mWidth){
+            x = mScreenWidth - mWidth;
+        }
         if(y < 0) {
             y = 0;
         }
