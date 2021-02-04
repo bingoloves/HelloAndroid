@@ -59,4 +59,9 @@ dependencies {
     //ButterKnife
     api deps.butterknife
     annotationProcessor deps.butterknifeCompiler
+
+    //内存泄漏检测工具
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 }

@@ -1,7 +1,6 @@
 package cn.cqs.login;
 
-import android.app.Application;
-
+import cn.cqs.common.base.BaseApplication;
 import cn.cqs.common.log.LogUtils;
 
 /**
@@ -13,7 +12,7 @@ import cn.cqs.common.log.LogUtils;
  * @UpdateUser: 更新者
  * @UpdateDate: 2021/2/3
  */
-public class LoginApp extends Application {
+public class LoginApp extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();

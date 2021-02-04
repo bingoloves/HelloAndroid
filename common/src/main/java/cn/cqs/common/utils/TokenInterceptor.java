@@ -1,4 +1,4 @@
-package cn.cqs.helloandroid;
+package cn.cqs.common.utils;
 
 import java.io.IOException;
 

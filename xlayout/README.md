@@ -3,7 +3,7 @@
 #### 使用
 ```gradle
   //添加依赖
-  implementation 'com.github.bingoloves:xlayout:1.0.1'
+  implementation 'com.github.bingoloves:xlayout:1.0.2'
 ```
 ```xml
         <declare-styleable name="XUILayout">

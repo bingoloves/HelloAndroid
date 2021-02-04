@@ -27,15 +27,6 @@ import cn.cqs.common.log.LogUtils;
  */
 
 public class ToastUtils {
-//    private static Toast mToast;
-//    /**
-//     * 自定义Toast布局
-//     */
-//    private static View view;
-//    /**
-//     * 默认的padding值
-//     */
-//    private static int paddingLeft,paddingTop,paddingRight,paddingBottom;
     /**
      * 自定义Toast
      * @param message

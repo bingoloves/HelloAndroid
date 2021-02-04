@@ -1,53 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical">
     <TextView
         android:id="@+id/tv_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="当前设备分辨率"/>
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:text="200dp*100dp \n toastTest"
-        android:textAllCaps="false"
-        android:onClick="toastTest" />
-    <Button
-        android:layout_width="360dp"
-        android:layout_height="150dp"
-        android:text="360dp*150dp \n showFloat"
-        android:textAllCaps="false"
-        android:onClick="showFloat" />
-    <Button
+    <cn.cqs.common.view.OverScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadingEdge="none"/>
+    </cn.cqs.common.view.OverScrollView>
+
+    <cn.cqs.shadow.ShadowLayout
+        android:id="@+id/tvShadowWater"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="hideFloat"
-        android:textAllCaps="false"
-        android:onClick="hideFloat" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="workflow"
-        android:textAllCaps="false"
-        android:onClick="showWorkflow" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="跳转Two"
-        android:textAllCaps="false"
-        android:onClick="navigateTwo" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="测试网络"
-        android:textAllCaps="false"
-        android:onClick="netTest" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="跳转Login"
-        android:textAllCaps="false"
-        android:onClick="toLogin" />
+        app:cornerRadius="18dp"
+        android:visibility="gone"
+        app:layoutBackground="@android:color/white"
+        app:layoutBackgroundSelect="@color/logcat_warning"
+        app:shadowColor="#1400285b"
+        app:shadowLimit="7dp"
+        app:shapeMode="ripple"
+        android:layout_marginBottom="30dp">
+        <TextView
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="水波纹" />
+    </cn.cqs.shadow.ShadowLayout>
 </LinearLayout>
