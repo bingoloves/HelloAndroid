@@ -5,15 +5,12 @@ buildscript {
     repositories {
         google()
         jcenter()
-        //applifecycle插件仓也是jitpack
-        maven { url 'https://jitpack.io' }
         maven { url 'http://maven.aliyun.com/nexus/content/repositories/releases/'}
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
         //发布私有在线库(jitpack)
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
-        //classpath 'com.txl.EasySmallWidth:easySmallWidth:1.0.0'
         //添加butterknife依赖插件,为了module级别使用
         classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
         //添加emas-services插件(阿里热更新)

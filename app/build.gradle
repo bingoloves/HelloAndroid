@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'BuildAdaptionPlugin'
 apply plugin: 'android-aspectjx'
 //aspectjx {//另外如果使用淘宝等其他的 sdk ,需要进行排除
 //    exclude 'androidx','com.google','com.squareup','com.alipay','org.apache','com.taobao'
@@ -78,7 +77,6 @@ dependencies {
     implementation deps.design
     implementation deps.glide
     implementation deps.constraint
-    implementation project(':aop')
     implementation project(':common')
 //    implementation project(':crash')
 //    implementation project(':logcat')
@@ -87,8 +85,6 @@ dependencies {
     implementation 'com.github.bingoloves:logcat:1.0.0'
     implementation 'com.github.bingoloves:workflow:1.0.0'
     implementation 'com.github.bingoloves:adapter:1.0.0'
-
-//    implementation deps.common
     annotationProcessor deps.glideCompiler
     annotationProcessor deps.arouterCompiler
     annotationProcessor deps.butterknifeCompiler
@@ -98,27 +94,8 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    //子模块部分
+    if (!isLoginModule.toBoolean()) {
+        implementation project(':login')
+    }
 }
-/**EasySmallWidth屏幕适配*/
-/*adaptionAppExtension{
-    defaultDesignWidth = 360f
-    enableAdapter = true
-//    needToAdaptedWidth.add(400)
-//    needToAdaptedWidth.add(411)
-//    needToAdaptedWidth.add(441)
-//    needToAdaptedWidth.add(441)
-//    res路径，默认不用配置
-//    resPath = "${File.separator}src${File.separator}main${File.separator}res${File.separator}"
-
-    //针对单独模块创建独自的配置
-    //def ex = createBuildAdaptionPluginExtension(project,adaptionAppExtension,"testAutoBuildDimen")
-    //对模块testAutoBuildDimen sw400与默认值的转换关系为 实际值*1.0
-    //ex.conversionMap.put(400,1.0f)
-    //对模块testAutoBuildDimen sw400与默认值的转换关系为 实际值*2.0
-    //ex.conversionMap.put(411,2.0f)
-    //对模块testAutoBuildDimen sw400与默认值的转换关系为 实际值*3.0
-    //ex.conversionMap.put(441,3.0f)
-    //def aeasy = createBuildAdaptionPluginExtension(project,adaptionAppExtension,"aeasybuild")
-    //aeasy  模块的默认宽度是375dp
-    //aeasy.defaultDesignWidth = 375f
-}*/

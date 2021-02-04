@@ -1,24 +1,15 @@
-apply plugin: 'com.android.library'
-apply plugin: 'com.jakewharton.butterknife'
-apply plugin: 'maven'
-uploadArchives{
-    repositories.mavenDeployer{
-        //本地仓库路径
-        repository(url: uri('../repo'))
-        // 唯一标识
-        pom.groupId = "cn.cqs"
-        // 项目名称
-        pom.artifactId = "common"
-        // 版本号
-        pom.version = "1.0.0"
-    }
+if (isLoginModule.toBoolean()) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
 }
-/**
- * 组件的中间层，项目中的组件都必须依赖的公共模块
- */
+apply plugin: 'com.jakewharton.butterknife'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
+        if (isLoginModule.toBoolean()) {
+            applicationId "cn.cqs.login"
+        }
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         javaCompileOptions {
@@ -27,36 +18,31 @@ android {
             }
         }
     }
-
+    sourceSets {
+        main {
+            if (isLoginModule.toBoolean()) {
+                manifest.srcFile 'src/main/manifest/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    //避免资源文件的冲突 模块中加入以模块命名的前缀
+    //resourcePrefix "login_"
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     def deps = rootProject.ext.dependencies
     implementation deps.appcompat
-    //工具类组件
-    api project(':base')
-    api project(':xlayout')
-    api project(':aop')
-    api project(':http')
-    api deps.gson
-    api deps.design
-    api deps.autosize
-    api deps.permissionx
-    api deps.immersionbar
-    //glide
-    api deps.glide
+    implementation project(':common')
     annotationProcessor deps.glideCompiler
-    //ARouter路由
-    api deps.arouterApi
     annotationProcessor deps.arouterCompiler
-    //ButterKnife
-    api deps.butterknife
     annotationProcessor deps.butterknifeCompiler
 }

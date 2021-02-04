@@ -1,13 +1,15 @@
 package cn.cqs.helloandroid;
 
 import android.Manifest;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.permissionx.guolindev.callback.RequestCallback;
 import java.util.List;
+
 import cn.cqs.aop.annotation.AspectAnalyze;
 import cn.cqs.aop.annotation.SingleClick;
 import cn.cqs.aop.aspect.ActivityAspect;
@@ -17,10 +19,15 @@ import cn.cqs.common.log.LogUtils;
 import cn.cqs.common.utils.PermissionUtils;
 import cn.cqs.common.utils.ToastUtils;
 import cn.cqs.common.view.floatview.FloatViewController;
+import cn.cqs.http.BaseObserver;
+import cn.cqs.http.BaseResponse;
+import cn.cqs.http.RetrofitUtil;
 import cn.cqs.workflow.Node;
 import cn.cqs.workflow.WorkFlow;
 import cn.cqs.workflow.WorkNode;
 import cn.cqs.workflow.Worker;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -59,18 +66,7 @@ public class MainActivity extends AppCompatActivity{
 //                }
 //            }
 //        }).start();
-//CrashHelper.init(true,0,null);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        int activityStackSize = ActivityAspect.getActivityStackSize();
-        Activity currentActivity = ActivityAspect.getCurrentActivity();
-        LogUtils.e("activityStackSize = "+activityStackSize);
-        if (currentActivity != null){
-            LogUtils.e("currentActivity = "+currentActivity.getClass().getName());
-        }
+        ActivityAspect.setDefaultAnimation(new int[]{R.anim.slide_in_from_right,R.anim.slide_out_from_left },new int[]{R.anim.slide_in_from_left,R.anim.slide_out_from_right});
     }
 
     private void initPermissionX() {
@@ -84,9 +80,9 @@ public class MainActivity extends AppCompatActivity{
     }
     @SingleClick(value = 1000)
     public void toastTest(View view){
-        LogUtils.e("测试bug"+1/0);
+//        LogUtils.e("测试bug"+1/0);
             i++;
-//          ToastUtils.show("哈哈哈 i = " + i);
+          ToastUtils.show("哈哈哈 i = " + i);
 //          ToastUtils.show(R.drawable.ic_check_24dp,"哈哈哈");
 //        ToastUtils.show(R.drawable.ic_check_24dp,"哈哈哈,恭喜啦 你中奖啦,快来领奖啊按时不领作废处理,你一定要早点来兑换啊，不然就没机会了");
     }
@@ -149,5 +145,29 @@ public class MainActivity extends AppCompatActivity{
 //        startActivity(intent);
         Navigator.create(NavigationServer.class).moveTwo(this, "xuebing");
         finish();
+    }
+    public void netTest(View view){
+        LogUtils.e("id:"+Thread.currentThread().getId()+";线程名:"+Thread.currentThread().getName());
+        RetrofitUtil.getService(ApiService.class).testApi("top")
+                .subscribeOn(Schedulers.io())
+//                .observeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver<BaseResponse>(this,true) {
+
+                    @Override
+                    public void onSuccess(BaseResponse baseResponse) {
+                        LogUtils.e("onSuccess");
+                    }
+
+                    @Override
+                    public void onFailure(String s) {
+                        LogUtils.e("onFailure");
+                        ToastUtils.show(s);
+                    }
+                });
+    }
+    public void toLogin(View view){
+        ARouter.getInstance().build("/login/login")
+                .navigation(this);
     }
 }

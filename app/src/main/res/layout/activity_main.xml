@@ -38,4 +38,16 @@
         android:text="跳转Two"
         android:textAllCaps="false"
         android:onClick="navigateTwo" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="测试网络"
+        android:textAllCaps="false"
+        android:onClick="netTest" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="跳转Login"
+        android:textAllCaps="false"
+        android:onClick="toLogin" />
 </LinearLayout>
