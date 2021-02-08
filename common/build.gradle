@@ -45,6 +45,10 @@ dependencies {
     api project(':xlayout')
     api project(':aop')
     api project(':http')
+//    api project(':toast')       //全局Toast配置
+//    api project(':language')    //国际化
+    api 'com.github.bingoloves:toast:1.0.0'
+    api 'com.github.bingoloves:language:1.0.0'
     api deps.gson
     api deps.design
     api deps.autosize

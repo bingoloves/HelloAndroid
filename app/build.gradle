@@ -83,6 +83,8 @@ dependencies {
     implementation project(':workflow')
     implementation project(':shadow')
     implementation project(':dialog')
+//    implementation project(':xlogcat')
+    implementation 'com.github.bingoloves:xlogcat:1.0.0'
 //    implementation 'com.github.bingoloves:crash:1.0.2'
 //    implementation 'com.github.bingoloves:logcat:1.0.0'
 //    implementation 'com.github.bingoloves:workflow:1.0.0'

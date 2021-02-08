@@ -16,5 +16,4 @@
         android:text="hideFloat"
         android:textAllCaps="false"
         android:onClick="hideFloat" />
-
 </LinearLayout>

@@ -227,15 +227,16 @@ public class LogPrinterImpl implements LogPrinter {
         String msgJson = formatJson(json);
 
         StringBuilder builder = new StringBuilder();
-        builder.append(TOP_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER + "\n")
+        builder
+//                .append(TOP_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER + "\n")
                 .append("Thread:" + Thread.currentThread().getName() + "\n")
-                .append(SINGLE_DIVIDER + SINGLE_DIVIDER + "\n")
+//                .append(SINGLE_DIVIDER + SINGLE_DIVIDER + "\n")
                 .append(msgUrl + "\n")
-                .append(SINGLE_DIVIDER + SINGLE_DIVIDER + "\n")
+//                .append(SINGLE_DIVIDER + SINGLE_DIVIDER + "\n")
                 .append(msgParas + "\n")
-                .append(SINGLE_DIVIDER + SINGLE_DIVIDER + "\n")
+//                .append(SINGLE_DIVIDER + SINGLE_DIVIDER + "\n")
                 .append(result + "\n")
-                .append(SINGLE_DIVIDER + SINGLE_DIVIDER + "\n")
+//                .append(SINGLE_DIVIDER + SINGLE_DIVIDER + "\n")
                 .append(msgJson);
         printMsg(Log.ERROR, tag, builder.toString());
     }
@@ -404,15 +405,17 @@ public class LogPrinterImpl implements LogPrinter {
             sb.delete(index, sb.length());
         }
         StringBuilder builder = new StringBuilder();
-        builder.append(TOP_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER + "\n");
+//        builder.append(TOP_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER + "\n");
         if (getPrintThread()) {
             builder.append("Thread:" + Thread.currentThread().getName() + "\n")
-                    .append(SINGLE_DIVIDER + SINGLE_DIVIDER + "\n");
+//                    .append(SINGLE_DIVIDER + SINGLE_DIVIDER + "\n")
+            ;
         }
 
         if (getPrintStack()) {
             builder.append(sb.toString() + "\n")
-                    .append(SINGLE_DIVIDER + SINGLE_DIVIDER + "\n");
+//                    .append(SINGLE_DIVIDER + SINGLE_DIVIDER + "\n")
+            ;
         }
 
         builder.append(message);
@@ -421,7 +424,7 @@ public class LogPrinterImpl implements LogPrinter {
 
     private void printMsg(int priority, String tag, String message) {
         message = message.replaceAll("\n", "\n" + VERTICAL_LINE);
-        message = message + "\n" + BOTTOM_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
+//        message = message + "\n" + BOTTOM_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
 
         while (message.length() > 2048) {
             Log.println(priority, tag, " \n" + message.substring(0, 2049));

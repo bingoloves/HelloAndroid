@@ -27,7 +27,7 @@ public class FloatView extends DragViewLayout {
             @Override
             public void onClick(View v) {
                 if (onFloatViewIconClickListener != null){
-                    onFloatViewIconClickListener.onFloatViewClick(context);
+                    onFloatViewIconClickListener.onFloatViewClick(v);
                 }
             }
         });
@@ -47,7 +47,7 @@ public class FloatView extends DragViewLayout {
      * 图标点击接口
      */
     public interface OnFloatViewIconClickListener{
-        void onFloatViewClick(Context context);
+        void onFloatViewClick(View view);
     }
     /**
      * 设置点击事件

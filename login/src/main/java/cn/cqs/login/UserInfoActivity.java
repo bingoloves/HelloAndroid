@@ -6,7 +6,7 @@ import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 
-import cn.cqs.common.utils.ToastUtils;
+import cn.cqs.toast.ToastUtils;
 
 /**
  * Created by bingo on 2021/2/3.

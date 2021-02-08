@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">HelloAndroid</string>
+    <string name="i18n_1000">Permission Request</string>
+    <string name="i18n_1001">Toast</string>
+    <string name="i18n_1002">FloatView</string>
+    <string name="i18n_1003">WorkFlow</string>
+    <string name="i18n_1004">Navigator</string>
+    <string name="i18n_1005">ARouter</string>
+    <string name="i18n_1006">DialogUtils</string>
+    <string name="i18n_1007">English</string>
+    <string name="i18n_1008">Network</string>
+    <string name="i18n_1009">Switch Language</string>
+</resources>

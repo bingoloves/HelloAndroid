@@ -7,16 +7,19 @@ import android.view.View;
 import android.widget.Toast;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.gyf.immersionbar.ImmersionBar;
+
+import java.lang.ref.WeakReference;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class BaseActivity extends AppCompatActivity {
     private Unbinder unbinder;
-    protected Activity activity;
+    protected WeakReference<Activity> activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.activity = this;
+        activity = new WeakReference<Activity>(this);
         ARouter.getInstance().inject(this);
     }
 

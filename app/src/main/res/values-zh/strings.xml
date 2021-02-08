@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">HelloAndroid</string>
-    <!--国际化语言最好是定义公共标识+数字-->
     <string name="i18n_1000">权限申请</string>
     <string name="i18n_1001">吐司</string>
     <string name="i18n_1002">悬浮框</string>

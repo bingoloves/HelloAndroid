@@ -1,6 +1,7 @@
 package cn.cqs.common.base;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.squareup.leakcanary.LeakCanary;
@@ -8,11 +9,13 @@ import com.squareup.leakcanary.LeakCanary;
 import cn.cqs.aop.aspect.ActivityAspect;
 import cn.cqs.common.AppLifecycleHelper;
 import cn.cqs.common.R;
-import cn.cqs.common.utils.ToastUtils;
 import cn.cqs.common.utils.TokenInterceptor;
 import cn.cqs.http.HttpConfig;
 import cn.cqs.http.ResponseListener;
 import cn.cqs.http.ResponseResult;
+import cn.cqs.language.MultiLanguages;
+import cn.cqs.toast.ToastUtils;
+import cn.cqs.toast.style.ToastAliPayStyle;
 
 /**
  * Created by bingo on 2021/2/4.
@@ -29,6 +32,10 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        // 初始化吐司工具类
+        ToastUtils.init(this, new ToastAliPayStyle(this));
+        //国际化多语言配置
+        MultiLanguages.init(this);
         //网络请求框架
         HttpConfig.getHttpConfig().setHost("http://www.baidu.com");
         HttpConfig.getHttpConfig().addInterceptor(new TokenInterceptor());
@@ -64,5 +71,10 @@ public class BaseApplication extends Application {
         ARouter.init(this);
         //全局页面跳转动画
         ActivityAspect.setDefaultAnimation(new int[]{R.anim.slide_in_from_right,R.anim.slide_out_from_left },new int[]{R.anim.slide_in_from_left,R.anim.slide_out_from_right});
+    }
+    @Override
+    protected void attachBaseContext(Context base) {
+        // 国际化适配（绑定语种）
+        super.attachBaseContext(MultiLanguages.attach(base));
     }
 }

@@ -28,76 +28,13 @@ public class FloatViewController {
     private static class LittleMonkProviderHolder {
         private static final FloatViewController sInstance = new FloatViewController();
     }
-
-    /**
-     * 初始化
-     * @param debug       是否需要悬浮debug组件
-     * @param application 对Activity生命周期拦截处理相关的逻辑
-     * @param icon         图标
-     * @param listener     点击图标时间
-     */
-    public void init(final boolean debug, Application application, @DrawableRes final int icon, final FloatView.OnFloatViewIconClickListener listener){
-        if (debug){
-            application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
-                @Override
-                public void onActivityCreated(final Activity activity, Bundle savedInstanceState) {
-                    //排除crash库崩溃页面，不用显示Logcat
-                    if (activity instanceof FragmentActivity && !"cn.cqs.crash.DefaultErrorActivity".equals(activity.getClass().getCanonicalName())){
-                        FloatViewController.getInstance().addFloatLayout((FragmentActivity) activity, icon, listener);
-                        if (activity.hasWindowFocus()){
-                            FloatViewController.getInstance().show((FragmentActivity) activity);
-                        } else {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    FloatViewController.getInstance().show((FragmentActivity) activity);
-                                }
-                            },800);
-                        }
-                    }
-                }
-
-                @Override
-                public void onActivityStarted(Activity activity) {
-
-                }
-
-                @Override
-                public void onActivityResumed(Activity activity) {
-
-                }
-
-                @Override
-                public void onActivityPaused(Activity activity) {
-
-                }
-
-                @Override
-                public void onActivityStopped(Activity activity) {
-
-                }
-
-                @Override
-                public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
-                }
-
-                @Override
-                public void onActivityDestroyed(Activity activity) {
-                    if (debug && activity instanceof FragmentActivity){
-                        FloatViewController.getInstance().destroy((FragmentActivity) activity);
-                    }
-                }
-            });
-        }
-    }
     /**
      * 添加悬浮组件
      * @param activity
      * @param floatIcon 悬浮Icon
      * @param iconClickListener
      */
-    public void addFloatLayout(FragmentActivity activity, @DrawableRes int floatIcon,FloatView.OnFloatViewIconClickListener iconClickListener){
+    public void addFloatLayout(Activity activity, @DrawableRes int floatIcon,FloatView.OnFloatViewIconClickListener iconClickListener){
         FloatView floatView = new FloatView(activity,floatIcon);
         floatView.setOnFloatViewIconClickListener(iconClickListener);
         WindowManager.LayoutParams floatLayoutParams = floatView.getFloatLayoutParams();
@@ -116,11 +53,11 @@ public class FloatViewController {
     /**
      * 全局缓存表
      */
-    private Map<FragmentActivity,FloatView> mFloatViewsMap = new HashMap<>();
+    private Map<Activity,FloatView> mFloatViewsMap = new HashMap<>();
     /**
      * 悬浮球显示
      */
-    public void show(FragmentActivity activity) {
+    public void show(Activity activity) {
         if (mFloatViewsMap.containsKey(activity)){
             FloatView floatView = mFloatViewsMap.get(activity);
             if (!floatView.isAttachedToWindow()){
